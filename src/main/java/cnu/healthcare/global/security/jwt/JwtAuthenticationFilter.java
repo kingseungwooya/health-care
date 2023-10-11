@@ -2,6 +2,7 @@ package cnu.healthcare.global.security.jwt;
 
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
+import cnu.healthcare.domain.member.service.MemberServiceImpl;
 import cnu.healthcare.global.security.LoginRequestDto;
 import cnu.healthcare.global.security.auth.PrincipalDetails;
 import com.auth0.jwt.JWT;
@@ -16,6 +17,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,6 +27,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
+    private final static Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     private final AuthenticationManager authenticationManager;
     private final JwtConfig jwtConfig;
@@ -42,12 +47,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        log.info("-----------------------");
+        log.info("input 회원  id -> {}", loginRequestDto.getMemberId());
 
         // 유저네임패스워드 토큰 생성
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(
-                        loginRequestDto.getUsername(),
+                        loginRequestDto.getMemberId(),
                         loginRequestDto.getPassword());
 
 

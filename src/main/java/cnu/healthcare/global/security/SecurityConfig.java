@@ -22,7 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableConfigurationProperties(JwtConfig.class)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
-=    private final MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     private final CorsConfig corsConfig;
 
@@ -33,11 +33,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         return new BCryptPasswordEncoder();
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
-    }
     public SecurityConfig(MemberRepository memberRepository, CorsConfig corsConfig, JwtConfig jwtConfig, UserDetailsService userDetailsService
     ) {
         this.memberRepository = memberRepository;
@@ -52,6 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         JwtAuthenticationFilter customAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager(),
                 jwtConfig);
         customAuthenticationFilter.setUsernameParameter("memberId");
+        customAuthenticationFilter.setPasswordParameter("password");
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
         http
                 .addFilter(corsConfig.corsFilter())

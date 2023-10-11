@@ -15,7 +15,7 @@ public enum ResponseEnum {
 
 
     USER_JOIN_SUCCESS(200, "회원가입에 성공하였습니다."),
-    USER_JOIN_FAIL(400, "다시 시도해주세요.");
+    USER_JOIN_DUPLICATE(400, "이미 존재하는 아이디 입니다.");
 
 
     private final int code;
