@@ -1,6 +1,6 @@
 package cnu.healthcare.domain.member;
 
 public enum RoleName {
-    USER,
-    ADMIN
+    ROLE_USER,
+    ROLE_ADMIN
 }
