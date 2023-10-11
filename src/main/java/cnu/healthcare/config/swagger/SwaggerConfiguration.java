@@ -20,7 +20,7 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("cnu.healthcare"))
+                .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build();
     }
