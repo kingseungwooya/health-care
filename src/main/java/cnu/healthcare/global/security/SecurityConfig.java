@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 jwtConfig);
         customAuthenticationFilter.setUsernameParameter("memberId");
         customAuthenticationFilter.setPasswordParameter("password");
-        customAuthenticationFilter.setFilterProcessesUrl("/api/login");
+        customAuthenticationFilter.setFilterProcessesUrl("/api/mvp/login");
         http
                 .addFilter(corsConfig.corsFilter())
                 .csrf().disable()

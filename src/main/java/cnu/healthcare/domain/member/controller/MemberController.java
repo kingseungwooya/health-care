@@ -22,7 +22,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RestController
 @RequestMapping(REST_URL_MEMBER)
 public class MemberController {
-    public static final String REST_URL_MEMBER = "api/mvp/member";
+    public static final String REST_URL_MEMBER = "api/mvp";
 
     private final MemberService memberService;
 
