@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -23,6 +24,7 @@ public class GroupServiceImpl implements GroupService {
     private final MemberGroupRepository memberGroupRepository;
     private final MemberRepository memberRepository;
 
+    @Transactional
     @Override
     public GroupCodeRespDto createGroup(GroupDto groupDto) {
         Member member = memberRepository.findByMemberId(groupDto.getMemberId());
@@ -30,12 +32,12 @@ public class GroupServiceImpl implements GroupService {
                 new Group(groupDto.getGroupName())
         );
 
-        memberGroupRepository.save(
-                MemberGroup.builder()
-                        .group(group)
-                        .member(member)
-                        .build()
-        );
+        MemberGroup memberGroup = MemberGroup.builder()
+                .group(group)
+                .member(member)
+                .build();
+        memberGroupRepository.save(memberGroup);
         return new GroupCodeRespDto(group.getGroupId().toString());
     }
+
 }

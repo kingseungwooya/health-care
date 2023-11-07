@@ -16,8 +16,9 @@ public class MemberGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_group_id")
+    @Column(name = "mg_id")
     private Long memberGroupId;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -31,4 +32,5 @@ public class MemberGroup {
         this.member = member;
         this.group = group;
     }
+
 }
