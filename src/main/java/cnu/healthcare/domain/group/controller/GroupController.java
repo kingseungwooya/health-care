@@ -42,11 +42,13 @@ public class GroupController {
     @PostMapping("/join")
     @ApiOperation(value = "참여 코드로 그룹 참가")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "memberId", value = "member 고유한 id"),
             @ApiImplicitParam(name = "groupCode", value = "group code")
     })
     @ApiResponses({
             @ApiResponse(code = 201, message = "success"),
-            @ApiResponse(code = 400, message = "wrong request"),
+            @ApiResponse(code = 401, message = "invalid group code"),
+            @ApiResponse(code = 405, message = "group already joined"),
             @ApiResponse(code = 500, message = "server error")
     })
     public ResponseEntity<Void> joinGroup(@RequestBody JoinGroupDto joinGroupDto) {

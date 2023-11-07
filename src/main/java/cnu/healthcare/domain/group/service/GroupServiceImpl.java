@@ -3,11 +3,14 @@ package cnu.healthcare.domain.group.service;
 import cnu.healthcare.domain.group.Group;
 import cnu.healthcare.domain.group.MemberGroup;
 import cnu.healthcare.domain.group.controller.dto.request.GroupDto;
+import cnu.healthcare.domain.group.controller.dto.request.JoinGroupDto;
 import cnu.healthcare.domain.group.controller.dto.response.GroupCodeRespDto;
 import cnu.healthcare.domain.group.repo.GroupRepository;
 import cnu.healthcare.domain.group.repo.MemberGroupRepository;
 import cnu.healthcare.domain.member.Member;
 import cnu.healthcare.domain.member.repo.MemberRepository;
+import cnu.healthcare.global.exception.ResponseEnum;
+import cnu.healthcare.global.exception.handler.CustomApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -40,4 +43,31 @@ public class GroupServiceImpl implements GroupService {
         return new GroupCodeRespDto(group.getGroupId().toString());
     }
 
+    @Transactional
+    @Override
+    public void joinGroup(JoinGroupDto joinGroupDto) {
+        try {
+            UUID.fromString(joinGroupDto.getGroupCode());
+        } catch (IllegalArgumentException e) {
+            throw new CustomApiException(ResponseEnum.GROUP_CODE_NOT_EXIST);
+        }
+        Group group = groupRepository.findById(UUID.fromString(joinGroupDto.getGroupCode()))
+                .orElseThrow(
+                        () -> new CustomApiException(ResponseEnum.GROUP_CODE_NOT_EXIST)
+                );
+        Member member = memberRepository.findByMemberId(joinGroupDto.getMemberId());
+
+        if(memberGroupRepository.existsByGroupAndMember(group, member)) {
+            throw new CustomApiException(ResponseEnum.GROUP_ALREADY_JOINED);
+        }
+
+        MemberGroup memberGroup = MemberGroup.builder()
+                .member(member)
+                .group(group)
+                .build();
+        memberGroupRepository.save(memberGroup);
+    }
+
 }
+
+

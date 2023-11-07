@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class JoinGroupDto {
     private String groupCode;
+    private String memberId;
 }

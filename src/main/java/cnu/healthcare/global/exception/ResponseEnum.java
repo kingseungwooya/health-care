@@ -13,6 +13,8 @@ public enum ResponseEnum {
     // AUTH_REFRESH_DOES_NOT_EXIST(401, "REFRESH_DOES_NOT_EXIST"),
     // AUTH_REFRESH_EXPIRED(401, "AUTH_REFRESH_EXPIRED"),
 
+    GROUP_CODE_NOT_EXIST(401, "invalid group code"),
+    GROUP_ALREADY_JOINED(405, "group already joined"),
 
     USER_JOIN_SUCCESS(200, "회원가입에 성공하였습니다."),
     USER_JOIN_DUPLICATE(400, "이미 존재하는 아이디 입니다.");
