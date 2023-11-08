@@ -5,6 +5,7 @@ import cnu.healthcare.domain.group.MemberGroup;
 import cnu.healthcare.domain.group.controller.dto.request.GroupDto;
 import cnu.healthcare.domain.group.controller.dto.request.JoinGroupDto;
 import cnu.healthcare.domain.group.controller.dto.response.GroupCodeRespDto;
+import cnu.healthcare.domain.group.controller.dto.response.MyGroupDto;
 import cnu.healthcare.domain.group.repo.GroupRepository;
 import cnu.healthcare.domain.group.repo.MemberGroupRepository;
 import cnu.healthcare.domain.member.Member;
@@ -15,8 +16,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,7 +60,7 @@ public class GroupServiceImpl implements GroupService {
                 );
         Member member = memberRepository.findByMemberId(joinGroupDto.getMemberId());
 
-        if(memberGroupRepository.existsByGroupAndMember(group, member)) {
+        if (memberGroupRepository.existsByGroupAndMember(group, member)) {
             throw new CustomApiException(ResponseEnum.GROUP_ALREADY_JOINED);
         }
 
@@ -66,6 +69,28 @@ public class GroupServiceImpl implements GroupService {
                 .group(group)
                 .build();
         memberGroupRepository.save(memberGroup);
+    }
+
+    @Override
+    public List<MyGroupDto> getMyGroups(String memberId) {
+        Member member = memberRepository.findByMemberId(memberId);
+        List<MemberGroup> memberGroups = memberGroupRepository.findAllByMember(member);
+        // member로 memberGroup모두 찾기
+        List<Group> myGroups = memberGroups.stream()
+                .map(
+                        m -> m.getGroup()
+                ).collect(Collectors.toList());
+
+        return myGroups.stream()
+                .map(
+                        g -> new MyGroupDto(g.getGroupName(),
+                                memberGroupRepository.findAllByGroup(g).stream()
+                                        .map(
+                                                mg -> mg.getMember()
+                                        ).collect(Collectors.toList())
+                        )
+
+                ).collect(Collectors.toList());
     }
 
 }
