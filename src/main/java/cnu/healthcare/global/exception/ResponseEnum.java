@@ -13,6 +13,8 @@ public enum ResponseEnum {
     // AUTH_REFRESH_DOES_NOT_EXIST(401, "REFRESH_DOES_NOT_EXIST"),
     // AUTH_REFRESH_EXPIRED(401, "AUTH_REFRESH_EXPIRED"),
 
+    VOICE_INVALID_TYPE(401, "invalid extension for voice"),
+
     GROUP_CODE_NOT_EXIST(401, "invalid group code"),
     GROUP_ALREADY_JOINED(405, "group already joined"),
 
