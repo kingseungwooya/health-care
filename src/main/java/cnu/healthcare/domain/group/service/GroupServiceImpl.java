@@ -83,7 +83,7 @@ public class GroupServiceImpl implements GroupService {
 
         return myGroups.stream()
                 .map(
-                        g -> new MyGroupDto(g.getGroupName(),
+                        g -> new MyGroupDto(g,
                                 memberGroupRepository.findAllByGroup(g).stream()
                                         .map(
                                                 mg -> mg.getMember()
