@@ -20,7 +20,7 @@ import static cnu.healthcare.domain.alarm.controller.AlarmController.REST_URL_AL
 @RequestMapping(REST_URL_ALARM)
 public class AlarmController {
 
-    public static final String REST_URL_ALARM = "api/mvp/alarm";
+    public static final String REST_URL_ALARM = "api/mvp/user/alarm";
 
     private final AlarmService alarmService;
     // 알람 생성 기능
