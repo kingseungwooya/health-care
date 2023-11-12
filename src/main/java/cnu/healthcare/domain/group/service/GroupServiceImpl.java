@@ -5,6 +5,7 @@ import cnu.healthcare.domain.group.MemberGroup;
 import cnu.healthcare.domain.group.controller.dto.request.GroupDto;
 import cnu.healthcare.domain.group.controller.dto.request.JoinGroupDto;
 import cnu.healthcare.domain.group.controller.dto.response.GroupCodeRespDto;
+import cnu.healthcare.domain.group.controller.dto.response.GroupInfoDto;
 import cnu.healthcare.domain.group.controller.dto.response.MyGroupDto;
 import cnu.healthcare.domain.group.repo.GroupRepository;
 import cnu.healthcare.domain.group.repo.MemberGroupRepository;
@@ -92,6 +93,20 @@ public class GroupServiceImpl implements GroupService {
 
                 ).collect(Collectors.toList());
     }
+
+    @Override
+    public List<GroupInfoDto> getGroupInfo(String groupId) {
+
+        Group group = groupRepository.findById(UUID.fromString(groupId)).orElseThrow(
+                () -> new CustomApiException(ResponseEnum.GROUP_CODE_NOT_EXIST)
+        );
+        return memberGroupRepository.findAllByGroup(group).stream()
+                .map(
+                        mg -> new GroupInfoDto(mg.getMember().getMemberName(), mg.getMember().getMemberId())
+                )
+                .collect(Collectors.toList());
+    }
+
 
 }
 
