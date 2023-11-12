@@ -22,7 +22,7 @@ import static cnu.healthcare.domain.group.controller.GroupController.REST_URL_GR
 public class GroupController {
 
     private final GroupService groupService;
-    public static final String REST_URL_GROUP = "api/mvp/group";
+    public static final String REST_URL_GROUP = "api/mvp/user/group";
 
     @PostMapping("")
     @ApiOperation(value = "그룹 생성")
@@ -59,8 +59,7 @@ public class GroupController {
     @GetMapping("/{memberId}")
     @ApiOperation(value = "참여 그룹들 가져오기")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "memberId", value = "member 고유한 id"),
-            @ApiImplicitParam(name = "groupCode", value = "group code")
+            @ApiImplicitParam(name = "memberId", value = "member 고유한 id")
     })
     @ApiResponses({
             @ApiResponse(code = 201, message = "success"),

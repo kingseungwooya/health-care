@@ -1,5 +1,6 @@
 package cnu.healthcare.global.security;
 
+import cnu.healthcare.domain.member.RoleName;
 import cnu.healthcare.domain.member.repo.MemberRepository;
 import cnu.healthcare.global.security.jwt.JwtAuthenticationFilter;
 import cnu.healthcare.global.security.jwt.JwtAuthorizationFilter;
@@ -7,6 +8,8 @@ import cnu.healthcare.global.security.jwt.JwtConfig;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -50,17 +53,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         customAuthenticationFilter.setPasswordParameter("password");
         customAuthenticationFilter.setFilterProcessesUrl("/api/mvp/login");
         http
+                .httpBasic().disable()
                 .addFilter(corsConfig.corsFilter())
                 .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .formLogin().disable()
-                .httpBasic().disable()
-                .addFilter(customAuthenticationFilter)
-                .addFilter(new JwtAuthorizationFilter(authenticationManager(), memberRepository, jwtConfig))
                 .authorizeRequests()
-                .antMatchers("/api/mvp/user/**")
-                .access("hasRole('ROLE_USER')")
-                .anyRequest().permitAll();
+                .antMatchers("/api/mvp/login/**", "/api/token/refresh/**", "/api/mvp/register/**", "/swagger-ui.html", "/swagger/**",
+                        "/swagger-resources/**", "/webjars/**", "/v2/api-docs")
+                .permitAll()
+                //.antMatchers("/api/mvp/user/**")
+                //.hasAnyAuthority(RoleName.ROLE_USER.name())
+                .anyRequest()
+                .permitAll()
+                //.authenticated()
+                .and()
+                .addFilter(customAuthenticationFilter)
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), memberRepository, jwtConfig));
     }
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+
 }
