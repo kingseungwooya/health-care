@@ -3,6 +3,7 @@ package cnu.healthcare.domain.group.controller;
 import cnu.healthcare.domain.group.controller.dto.request.GroupDto;
 import cnu.healthcare.domain.group.controller.dto.request.JoinGroupDto;
 import cnu.healthcare.domain.group.controller.dto.response.GroupCodeRespDto;
+import cnu.healthcare.domain.group.controller.dto.response.GroupInfoDto;
 import cnu.healthcare.domain.group.controller.dto.response.MyGroupDto;
 import cnu.healthcare.domain.group.service.GroupService;
 import cnu.healthcare.domain.member.controller.dto.request.RegisterDto;
@@ -69,6 +70,25 @@ public class GroupController {
     })
     public ResponseEntity<List<MyGroupDto>> getMyGroup(@PathVariable String memberId){
         return ResponseEntity.status(HttpStatus.OK).body(groupService.getMyGroups(memberId));
+    }
+
+    /**
+     * group 입장시 줘야할 정보들 반환
+     * ex) member name과 id들
+     */
+    @GetMapping("/enter/{groupId}")
+    @ApiOperation(value = "group 입장시 보여지는 초기 정보들 그룹 멤버 id, name")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "groupId", value = "group의 고유한 id"),
+    })
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "success"),
+            @ApiResponse(code = 401, message = "invalid group code"),
+            @ApiResponse(code = 405, message = "group already joined"),
+            @ApiResponse(code = 500, message = "server error")
+    })
+    public ResponseEntity<List<GroupInfoDto>> enterGroup(@PathVariable String groupId) {
+        return ResponseEntity.status(HttpStatus.OK).body(groupService.getGroupInfo(groupId));
     }
 
 
