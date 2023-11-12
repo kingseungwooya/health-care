@@ -1,6 +1,7 @@
 package cnu.healthcare.domain.alarm.controller;
 
 import cnu.healthcare.domain.alarm.controller.request.AlarmDto;
+import cnu.healthcare.domain.alarm.controller.request.GetRequestAlarmDto;
 import cnu.healthcare.domain.alarm.service.AlarmService;
 import cnu.healthcare.domain.group.controller.dto.request.GroupDto;
 import cnu.healthcare.domain.group.controller.dto.response.GroupCodeRespDto;
@@ -30,15 +31,14 @@ public class AlarmController {
 
 
     @PostMapping("")
-    @ApiOperation(value = "알람 생성")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "groupId", value = "그룹 id"),
-            @ApiImplicitParam(name = "memberId", value = "알람을 설정된 사람의 id"),
-            @ApiImplicitParam(name = "days", value = "설정 요일 배열 MON, TUES, WED, THURS, FRI, SAT, SUN 고정 "),
-            @ApiImplicitParam(name = "time", value = "알람 설정 시간 형식 H:mm:ss "),
-            @ApiImplicitParam(name = "voice", value = "multipart/form-data 요청필요"),
-            @ApiImplicitParam(name = "alarmName", value = "계획명")
-    })
+    @ApiOperation(value = "알람 생성" , notes = ""
+            + "name = \"groupId\", value = \"그룹 id\"),\n"
+            + "name = \"memberId\", value = \"알람을 설정된 사람의 id\"),\n"
+            + "name = \"days\", value = \"설정 요일 배열 MON, TUES, WED, THURS, FRI, SAT, SUN 고정 \"),\n"
+            + "name = \"time\", value = \"알람 설정 시간 형식 H:mm:ss \"),\n"
+            + "name = \"voice\", value = \"multipart/form-data 요청필요\"),\n"
+            + "name = \"alarmName\", value = \"계획명\")"
+            + "")
     @ApiResponses({
             @ApiResponse(code = 201, message = "created"),
             @ApiResponse(code = 400, message = "wrong request"),
@@ -56,5 +56,15 @@ public class AlarmController {
                 new AlarmDto(groupId, memberId, alarmName, days, time, voice)
         );
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+    // 작업 더 해야함함    @GetMapping("")
+    @ApiOperation( value = "사용자와 Group에 따른 알람 갖고오기")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "created"),
+            @ApiResponse(code = 400, message = "wrong request"),
+            @ApiResponse(code = 500, message = "server error")
+    })
+    public ResponseEntity<?> getAlarm(@RequestBody GetRequestAlarmDto) {
+        return;
     }
 }
