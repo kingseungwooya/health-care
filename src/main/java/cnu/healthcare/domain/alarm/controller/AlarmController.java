@@ -2,6 +2,7 @@ package cnu.healthcare.domain.alarm.controller;
 
 import cnu.healthcare.domain.alarm.controller.request.AlarmDto;
 import cnu.healthcare.domain.alarm.controller.request.GetRequestAlarmDto;
+import cnu.healthcare.domain.alarm.controller.response.AlarmResponseDto;
 import cnu.healthcare.domain.alarm.service.AlarmService;
 import cnu.healthcare.domain.alarm.service.FileHandler;
 import cnu.healthcare.domain.group.controller.dto.request.GroupDto;
@@ -61,17 +62,17 @@ public class AlarmController {
         );
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-    // 작업 더 해야함함
-   // @GetMapping("")
-   // @ApiOperation( value = "사용자와 Group에 따른 알람 갖고오기")
-   // @ApiResponses({
-   //         @ApiResponse(code = 201, message = "created"),
-   //         @ApiResponse(code = 400, message = "wrong request"),
-   //         @ApiResponse(code = 500, message = "server error")
-   // })
-   // public ResponseEntity<?> getAlarm(@RequestBody GetRequestAlarmDto) {
-   //     return;
-   // }
+    @PostMapping("/list")
+    @ApiOperation( value = "사용자와 Group에 따른 알람 갖고오기")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "created"),
+            @ApiResponse(code = 400, message = "wrong request"),
+            @ApiResponse(code = 500, message = "server error")
+    })
+    public ResponseEntity<List<AlarmResponseDto>> getAlarm(@RequestBody GetRequestAlarmDto getRequestAlarmDto) {
+        return ResponseEntity.ok().body(alarmService.getAlarm(getRequestAlarmDto));
+    }
+
     @PostMapping("/test")
     @ApiOperation(value = "알람 생성")
     @ApiResponses({
@@ -82,11 +83,12 @@ public class AlarmController {
     public ResponseEntity<test> createAlarmTest(
             @RequestParam(value = "voice", required = false) MultipartFile voice
     )  {
-
+        // System.out.println(voice.getOriginalFilename());
         FileHandler fileHandler = new FileHandler();
         try {
             fileHandler.parseFileInfo(voice);
         } catch (Exception e) {
+            // System.out.println(e.getMessage());
             throw new CustomApiException(ResponseEnum.VOICE_INVALID_TYPE);
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(new test(voice.getOriginalFilename()));

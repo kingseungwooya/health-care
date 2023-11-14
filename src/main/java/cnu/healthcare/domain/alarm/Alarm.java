@@ -35,6 +35,9 @@ public class Alarm {
 
     private String days;
 
+    @Column(name = "success_flag", nullable = false, columnDefinition = "TINYINT", length = 1)
+    private boolean isSuccess;
+
     @Builder
     public Alarm(MemberGroup memberGroup, String alarmName, LocalTime time, Voice voice, List<String> days) {
         this.memberGroup = memberGroup;
@@ -42,6 +45,7 @@ public class Alarm {
         this.time = time;
         this.voice = voice;
         this.days = arrayToString(days);
+        this.isSuccess = false;
     }
 
     private String arrayToString(List<String> days) {
