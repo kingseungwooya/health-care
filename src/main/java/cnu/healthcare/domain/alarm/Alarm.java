@@ -33,8 +33,7 @@ public class Alarm {
     @JoinColumn(name = "voice_id")
     private Voice voice;
 
-    @Lob
-    private List<String> days;
+    private String days;
 
     @Builder
     public Alarm(MemberGroup memberGroup, String alarmName, LocalTime time, Voice voice, List<String> days) {
@@ -42,6 +41,23 @@ public class Alarm {
         this.alarmName = alarmName;
         this.time = time;
         this.voice = voice;
-        this.days = days;
+        this.days = arrayToString(days);
+    }
+
+    private String arrayToString(List<String> days) {
+        if (days == null || days.isEmpty()) {
+            return ""; // 빈 배열이나 null이 들어오면 빈 문자열 반환
+        }
+
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < days.size(); i++) {
+            result.append(days.get(i));
+            if (i < days.size() - 1) {
+                result.append(", "); // 마지막 요소가 아니면 쉼표와 공백 추가
+            }
+        }
+        System.out.println(result.toString());
+
+        return result.toString();
     }
 }
