@@ -29,10 +29,10 @@ public class AlarmController {
     public static final String REST_URL_ALARM = "api/mvp/user/alarm";
 
     private final AlarmService alarmService;
-    // 알람 생성 기능
+    // 알람 생성 기능 ㅇ
     // 알람 푸시 기능
-    // 녹음 기능
-    // 게획 완료시 완료료 바뀌는 기능
+    // 녹음 기능 ㅇ
+    // 게획 완료시 완료료 바뀌는 기능 ㅇ
 
 
     @PostMapping("")
@@ -92,6 +92,18 @@ public class AlarmController {
             throw new CustomApiException(ResponseEnum.VOICE_INVALID_TYPE);
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(new test(voice.getOriginalFilename()));
+    }
+
+    @GetMapping("/success/{alarmId}")
+    @ApiOperation(value = "알람 생성")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "created"),
+            @ApiResponse(code = 400, message = "wrong request"),
+            @ApiResponse(code = 500, message = "server error")
+    })
+    public ResponseEntity<Void> success(@PathVariable Long alarmId) {
+        alarmService.success(alarmId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
 

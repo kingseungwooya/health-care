@@ -77,7 +77,17 @@ public class AlarmServiceImpl implements AlarmService {
 
         return alarms.stream()
                 .map(
-                        a -> new AlarmResponseDto(a.getAlarmName(), a.getTime(), a.isSuccess())
+                        a -> new AlarmResponseDto(a.getAlarmId(), a.getAlarmName(), a.getTime(), a.isSuccess())
                 ).collect(Collectors.toList());
+    }
+
+    @Override
+    public void success(Long alarmId) {
+        Alarm alarm = alarmRepository.findById(alarmId).get();
+        if (alarm.isSuccess()) {
+            throw new CustomApiException(ResponseEnum.ALARM_ERROR);
+        }
+        alarm.success();
+        alarmRepository.save(alarm);
     }
 }

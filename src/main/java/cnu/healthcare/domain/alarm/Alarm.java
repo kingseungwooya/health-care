@@ -48,6 +48,17 @@ public class Alarm {
         this.isSuccess = false;
     }
 
+    public void success () {
+        this.isSuccess = true;
+    }
+
+    /**
+     * 스케쥴러로 매일 초기화 필요
+     */
+    public void reset() {
+        this.isSuccess = false;
+    }
+
     private String arrayToString(List<String> days) {
         if (days == null || days.isEmpty()) {
             return ""; // 빈 배열이나 null이 들어오면 빈 문자열 반환

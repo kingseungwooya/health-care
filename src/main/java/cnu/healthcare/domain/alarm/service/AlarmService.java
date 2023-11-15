@@ -11,5 +11,6 @@ public interface AlarmService {
 
     void createAlarm(AlarmDto alarmDto);
     List<AlarmResponseDto> getAlarm(GetRequestAlarmDto getRequestAlarmDto);
+    void success(Long alarmId);
 
 }
