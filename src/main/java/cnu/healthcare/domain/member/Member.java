@@ -26,15 +26,19 @@ public class Member {
 
     private String password;
 
+    @Column(name = "device_key")
+    private String deviceKey;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles = new ArrayList<>();
 
     @Builder
-    public Member(String memberId, String memberName, String password, Collection<Role> roles) {
+    public Member(String memberId, String memberName, String password, Collection<Role> roles, String deviceKey) {
         this.memberId = memberId;
         this.memberName = memberName;
         this.password = password;
         this.roles = roles;
+        this.deviceKey = deviceKey;
     }
 
 }

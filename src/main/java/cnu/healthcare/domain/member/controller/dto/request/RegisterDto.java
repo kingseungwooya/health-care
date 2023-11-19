@@ -20,10 +20,13 @@ public class RegisterDto {
 
     private String memberName;
 
+    private String deviceKey;
+
     public Member toMember(String password, Role role) {
         return Member.builder()
                 .memberId(memberId)
                 .memberName(memberName)
+                .deviceKey(deviceKey)
                 .password(password)
                 .roles(List.of(role))
                 .build();

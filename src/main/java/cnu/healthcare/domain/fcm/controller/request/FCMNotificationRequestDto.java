@@ -1,24 +1,16 @@
 package cnu.healthcare.domain.fcm.controller.request;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Getter
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class FCMNotificationRequestDto {
-    private Long targetUserId;
+    private String targetMemberId;
     private String title;
     private String body;
+    private String alarmId;
     // private String image;
     // private Map<String, String> data;
 
-    @Builder
-    public FCMNotificationRequestDto(Long targetUserId, String title, String body) {
-        this.targetUserId = targetUserId;
-        this.title = title;
-        this.body = body;
-        // this.image = image;
-        // this.data = data;
-    }
 }
