@@ -9,10 +9,15 @@ import cnu.healthcare.domain.group.controller.dto.request.GroupDto;
 import cnu.healthcare.domain.group.controller.dto.response.GroupCodeRespDto;
 import cnu.healthcare.global.exception.ResponseEnum;
 import cnu.healthcare.global.exception.handler.CustomApiException;
+import com.google.common.net.HttpHeaders;
 import io.swagger.annotations.*;
+import java.io.File;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -95,15 +100,28 @@ public class AlarmController {
     }
 
     @GetMapping("/success/{alarmId}")
-    @ApiOperation(value = "알람 생성")
+    @ApiOperation(value = "알람 확인 후 완료")
     @ApiResponses({
-            @ApiResponse(code = 201, message = "created"),
-            @ApiResponse(code = 400, message = "wrong request"),
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 404, message = "voice를 찾을 수 없음"),
             @ApiResponse(code = 500, message = "server error")
     })
     public ResponseEntity<Void> success(@PathVariable Long alarmId) {
         alarmService.success(alarmId);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping("/voice/{alarmId}")
+    public ResponseEntity<Resource> downLoadFile(@PathVariable Long alarmId) {
+        File file = alarmService.getVoice(alarmId);
+        if(file.exists()) {
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" +file.getName())
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(new FileSystemResource(file));
+        }
+        return ResponseEntity.notFound().build();
+
     }
 }
 

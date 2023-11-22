@@ -13,9 +13,12 @@ import cnu.healthcare.domain.group.repo.MemberGroupRepository;
 import cnu.healthcare.domain.member.repo.MemberRepository;
 import cnu.healthcare.global.exception.ResponseEnum;
 import cnu.healthcare.global.exception.handler.CustomApiException;
+import java.io.File;
+import java.nio.file.FileSystem;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -89,5 +92,12 @@ public class AlarmServiceImpl implements AlarmService {
         }
         alarm.success();
         alarmRepository.save(alarm);
+    }
+
+    @Override
+    public File getVoice(Long alarmId) {
+        Alarm alarm = alarmRepository.findById(alarmId).get();
+        String storedFilePath = alarm.getVoice().getStoredFilePath();
+        return new File(storedFilePath);
     }
 }
